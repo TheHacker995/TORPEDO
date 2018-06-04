@@ -1,0 +1,28 @@
+{
+  "name": "torpedo",
+  "version": "1.0.0",
+  "description": "Client for \"battaglia-navale\"",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheHacker995/TORPEDO.git"
+  },
+  "author": "TheHacker995",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TheHacker995/TORPEDO/issues"
+  },
+  "homepage": "https://github.com/TheHacker995/TORPEDO#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.3",
+    "node-fetch": "^2.1.2",
+    "pug": "^2.0.3",
+    "simple-argv": "^1.0.0",
+    "socket.io": "^2.1.1"
+  }
+}

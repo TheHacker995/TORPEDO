@@ -1,18 +1,154 @@
 <!doctype html>
 <html>
 	<head>
+		<style>
+			@import url('https://fonts.googleapis.com/css?family=Roboto');
+			body {
+				background: #E3F2FD;
+			}
+
+			#field {
+				width: 70vw;
+				height: 70vw;
+				table-layout: fixed;
+			}
+			#field td{
+				width: 2.8vw;
+				height: 2.8vw;
+				color: white;
+				font-family: 'Roboto', sans-serif;
+				font-size: .8vw;
+				background-color: #29B6F6;
+				text-align:center; 
+    			vertical-align:middle;
+			}
+			#field td.colpito {
+				background-color: #FFA726 !important;
+				cursor: not-allowed !important;
+			}
+			#field td.affondato {
+				background-color: #E64A19 !important;
+				cursor: not-allowed;
+			}
+			#field tr:nth-child(even) td:nth-child(odd), 
+			#field tr:nth-child(odd) td:nth-child(even) {
+				background-color: #03A9F4;
+			}
+			#field td:hover {
+				background-color: #00897B;
+				transition:.1s;
+				cursor: pointer;
+			}
+			#field tr:nth-child(even):hover td:nth-child(odd):hover, 
+			#field tr:nth-child(odd):hover td:nth-child(even):hover {
+				background-color: #00897B;
+				transition:.1s;
+				cursor: pointer;
+			}
+
+
+			#players, #ships {
+			  padding: 10px;
+			  border: 2px solid white;
+			  color: white;
+			  font-family: sans-serif;
+			  text-shadow: 1px 1px #000000;
+			  display: inline;
+			  margin: 10px;
+			}
+
+			#players {
+			  background: rgba(49, 167, 195, 1);
+			  position: absolute;
+			  left: 0px;
+			  top: 0px;
+			  width: 100%;
+			}
+
+			#ships {
+			  background: rgba(195, 43, 0, 1);
+			}
+
+			#players ul {
+			  padding: 5px;
+			  list-style: none;
+			}
+
+			#players .score {
+			  text-align: right;
+			}
+
+			#players .name {
+			  text-align: left;
+			}
+		</style>
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 		<title>TORPEDO</title>
 	</head>
 	<body>
-			
-	</body>
-	<script>
-		(() => {
+		<!--div id="players">
+	      	<h1>Players:</h1>
+	    	<table>
+		        <thead>
+		        	<th><td>Name</td><td>Score</td></th>
+		        </thead>
+		        <tbody>
+		          
+		        </tbody>
+	      	</table>
+    	</div-->
+		<center>
+			<table id = 'field'>
+				
+			</table>
+		</center>
+		</body>
+		<script>
+			function say(text) {
+				var synth = window.speechSynthesis;
+				var utterThis = new SpeechSynthesisUtterance(text);
+				utterThis.lang = 'en-US'
+				synth.speak(utterThis);
+			}
+
 			const socket = io();
-			socket.emit("attack", x, y);
-			socket.on("error", console.log)
-		})();
+			socket.on('bullet', (e) => {
+				console.log(e);
+				if (e) {
+					say('B');
+					setTimeout(() => say('In 1'), 8500)
+				}
+			});
+			socket.on('field', (e) => {
+				$('#field').html(e);
+				let i = 1;
+				let j = 1;
+				$('#field tr').each(function() {
+					$(this)
+						.find('td')
+						.each(function() {
+							$(this)
+								.attr('y', i)
+								.attr('x', j)
+								.click(() => {
+									if (!$(this).attr('class'))
+										socket.emit('attack', {x:$(this).attr('x'), y:$(this).attr('y')});
+								});
+							j++;
+						});
+					i++;
+					j=1;
+				});
+			});
+			socket.on('players', (e) => {
+				//console.log(e)
+				$('#players tbody').html(...Object.values(e).sort((a, b) => b.score - a.score).map(({ name, score }) => `<tr><td>${name}</td><td>${score}</td></tr>`).join(''));
+			});
+			socket.on('chat', (e) => {
+				if (e.code === 130)
+					say('killed');
+				console.log(e);
+			});
 	</script>
 </html>

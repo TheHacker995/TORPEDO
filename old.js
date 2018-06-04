@@ -5,9 +5,9 @@ npm install simple-argv
 npm install request
 */
 
-//node client.js -u url -n name -m mode [-t sleppTimeout][-h height -w width]:[-x attackX -y attackY]
 //node client.js -u http://192.168.1.231:8000 -m 1 -h 1000 -w 1000 -n Th995 -t 0
 
+//node client.js -u url -n name -m mode [-t sleppTimeout][-h height -w width]:[-x attackX -y attackY]
 const { u, n, w, h, m, x, y, t} = require('simple-argv');
 const sleep  = require("system-sleep");
 const fetch = require("node-fetch");
